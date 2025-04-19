@@ -11,65 +11,80 @@ public class RefereeDashboard extends JFrame {
     private Connection conn;
 
     public RefereeDashboard() {
-        setTitle("Referee Dashboard");
-        setSize(600, 400);
+        setTitle("🏆 Referee Dashboard");
+        setSize(700, 450);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-
+    
         try {
             conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "kataloni11");
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        // UI Styling
-        JPanel panel = new JPanel(new BorderLayout(10, 10));
-        panel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
-        panel.setBackground(Color.WHITE);
-
-        JPanel topPanel = new JPanel(new FlowLayout());
+    
+        // Modern UI panel
+        JPanel panel = new JPanel(new BorderLayout(15, 15));
+        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        panel.setBackground(new Color(245, 245, 245));
+    
+        // Header
+        JLabel titleLabel = new JLabel("Referee Dashboard");
+        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 24));
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        panel.add(titleLabel, BorderLayout.NORTH);
+    
+        // Top Input
+        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        topPanel.setBackground(new Color(245, 245, 245));
+    
         JLabel matchIdLabel = new JLabel("Enter Match ID:");
-        matchIdField = new JTextField(5);
-        loadButton = new JButton("Load Match");
-
+        matchIdLabel.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+        matchIdField = new JTextField(6);
+        matchIdField.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+        loadButton = new JButton("🔄 Load Match");
+    
         topPanel.add(matchIdLabel);
         topPanel.add(matchIdField);
         topPanel.add(loadButton);
-        panel.add(topPanel, BorderLayout.NORTH);
-
-        matchInfoLabel = new JLabel("Match info will appear here");
-        matchInfoLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        scoreLabel = new JLabel("Score: - ");
-        scoreLabel.setFont(new Font("Courier New", Font.PLAIN, 16));
-
-        JPanel centerPanel = new JPanel(new GridLayout(2, 1));
+        panel.add(topPanel, BorderLayout.BEFORE_FIRST_LINE);
+    
+        // Center info
+        matchInfoLabel = new JLabel("Match info will appear here", SwingConstants.CENTER);
+        matchInfoLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
+    
+        scoreLabel = new JLabel("Score: -", SwingConstants.CENTER);
+        scoreLabel.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+    
+        JPanel centerPanel = new JPanel(new GridLayout(2, 1, 10, 10));
+        centerPanel.setBackground(new Color(245, 245, 245));
         centerPanel.add(matchInfoLabel);
         centerPanel.add(scoreLabel);
         panel.add(centerPanel, BorderLayout.CENTER);
-
-        JPanel bottomPanel = new JPanel();
-        p1PointButton = new JButton("Point: Player 1");
-        p2PointButton = new JButton("Point: Player 2");
-        p1MinusButton = new JButton("-1: Player 1");
-        p2MinusButton = new JButton("-1: Player 2");
-        finishMatchButton = new JButton("Finish Match");
-
-        p1PointButton.setEnabled(false);
-        p2PointButton.setEnabled(false);
-        p1MinusButton.setEnabled(false);
-        p2MinusButton.setEnabled(false);
-        finishMatchButton.setEnabled(false);
-
-        bottomPanel.add(p1PointButton);
-        bottomPanel.add(p2PointButton);
-        bottomPanel.add(p1MinusButton);
-        bottomPanel.add(p2MinusButton);
-        bottomPanel.add(finishMatchButton);
+    
+        // Bottom Controls
+        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 15));
+        bottomPanel.setBackground(new Color(245, 245, 245));
+    
+        p1PointButton = new JButton("+ Player 1");
+        p2PointButton = new JButton("+ Player 2");
+        p1MinusButton = new JButton("- Player 1");
+        p2MinusButton = new JButton("- Player 2");
+        finishMatchButton = new JButton(" Finish Match");
+    
+        JButton[] allButtons = { p1PointButton, p2PointButton, p1MinusButton, p2MinusButton, finishMatchButton };
+        for (JButton btn : allButtons) {
+            btn.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+            btn.setFocusPainted(false);
+            btn.setBackground(new Color(220, 220, 220));
+            btn.setEnabled(false);
+            bottomPanel.add(btn);
+        }
+    
         panel.add(bottomPanel, BorderLayout.SOUTH);
-
+    
         add(panel);
         setVisible(true);
-
+    
         // Action Listeners
         loadButton.addActionListener(e -> loadMatch());
         p1PointButton.addActionListener(e -> updateScore(true));
@@ -78,6 +93,7 @@ public class RefereeDashboard extends JFrame {
         p2MinusButton.addActionListener(e -> undoPoint(false));
         finishMatchButton.addActionListener(e -> finishMatch());
     }
+    
 
     private void loadMatch() {
         try {

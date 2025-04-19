@@ -52,7 +52,7 @@ public class DatabaseInitializer {
                 "INSERT INTO users (username, password, role) VALUES " +
                 "('admin1', 'adminpass1', 'admin'), " +
                 "('admin2', 'adminpass2', 'admin'), " +
-                "('referee1', 'refpass1', 'referee'), " +
+                "('referee1', 'referee1', 'referee'), " +
                 "('referee2', 'refpass2', 'referee'), " +
                 "('referee3', 'refpass3', 'referee')"
             );

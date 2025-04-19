@@ -13,19 +13,45 @@ public class LoginUI extends JFrame {
         this.roleHint = roleHint;
 
         setTitle("MatchPoint - Login as " + roleHint);
-        setSize(400, 300);
+        setSize(450, 350);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        JPanel panel = new JPanel(new GridLayout(3, 2, 10, 10));
+        // Root panel with padding and background
+        JPanel rootPanel = new JPanel();
+        rootPanel.setLayout(new BoxLayout(rootPanel, BoxLayout.Y_AXIS));
+        rootPanel.setBorder(BorderFactory.createEmptyBorder(30, 50, 30, 50));
+        rootPanel.setBackground(Color.WHITE);
 
-        JLabel userLabel = new JLabel("Username:");
-        JTextField userField = new JTextField();
+        JLabel titleLabel = new JLabel("Login as " + roleHint);
+        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        titleLabel.setFont(new Font("SansSerif", Font.BOLD, 22));
+        titleLabel.setForeground(new Color(40, 40, 40));
+        rootPanel.add(titleLabel);
+        rootPanel.add(Box.createRigidArea(new Dimension(0, 20)));
 
-        JLabel passLabel = new JLabel("Password:");
-        JPasswordField passField = new JPasswordField();
+        JTextField userField = new JTextField(15);
+        userField.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        userField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 35));
+        userField.setBorder(BorderFactory.createTitledBorder("Username"));
+        rootPanel.add(userField);
+        rootPanel.add(Box.createRigidArea(new Dimension(0, 15)));
+
+        JPasswordField passField = new JPasswordField(15);
+        passField.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        passField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 35));
+        passField.setBorder(BorderFactory.createTitledBorder("Password"));
+        rootPanel.add(passField);
+        rootPanel.add(Box.createRigidArea(new Dimension(0, 25)));
 
         JButton loginButton = new JButton("Login");
+        loginButton.setFont(new Font("SansSerif", Font.BOLD, 16));
+        loginButton.setForeground(Color.WHITE);
+        loginButton.setBackground(new Color(33, 150, 243));
+        loginButton.setFocusPainted(false);
+        loginButton.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+        loginButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -44,14 +70,13 @@ public class LoginUI extends JFrame {
                         if (actualRole.equalsIgnoreCase(roleHint)) {
                             JOptionPane.showMessageDialog(LoginUI.this, "Login successful as " + actualRole + "!");
 
-                            // Open the appropriate dashboard based on the role
                             if (actualRole.equalsIgnoreCase("referee")) {
                                 new RefereeDashboard().setVisible(true);
                             } else if (actualRole.equalsIgnoreCase("admin")) {
                                 new AdminDashboard().setVisible(true);
                             }
 
-                            dispose(); // Close the login window
+                            dispose();
                         } else {
                             JOptionPane.showMessageDialog(LoginUI.this, "You are not authorized to login as " + roleHint, "Access Denied", JOptionPane.ERROR_MESSAGE);
                         }
@@ -64,21 +89,11 @@ public class LoginUI extends JFrame {
             }
         });
 
-        panel.add(userLabel);
-        panel.add(userField);
-        panel.add(passLabel);
-        panel.add(passField);
-        panel.add(new JLabel());
-        panel.add(loginButton);
-
-        add(panel);
+        rootPanel.add(loginButton);
+        add(rootPanel);
     }
 
     public static void main(String[] args) {
-        // Example usage for admin login
-        new LoginUI("admin").setVisible(true);
-
-        // Example usage for referee login
-        // new LoginUI("referee").setVisible(true);
+        SwingUtilities.invokeLater(() -> new LoginUI("admin").setVisible(true));
     }
 }
